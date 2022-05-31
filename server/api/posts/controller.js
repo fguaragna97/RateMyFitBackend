@@ -1,19 +1,68 @@
-exports.all = (req, res) => {
-  res.json({});
+const { Model } = require("./model");
+
+exports.all = async (req, res) => {
+  const response = await Model.find();
+
+  res.json({
+    data: response,
+  });
 };
 
-exports.create = (req, res) => {
-  res.json({});
+exports.create = async (req, res) => {
+  const { body = {} } = req;
+
+  const doc = new Model(body);
+
+  const response = await doc.save();
+
+  res.status(201);
+  res.json({
+    data: response,
+  });
 };
 
-exports.read = (req, res) => {
-  res.json({});
+exports.id = async (req, res, next) => {
+  const { params = {} } = req;
+  const { id = "" } = params;
+
+  const doc = await Model.findById(id);
+  if (doc) {
+    next();
+  } else {
+    next({
+      message: `${Model.modelName} not Found`,
+      statusCode: 404,
+    });
+  }
 };
 
-exports.update = (req, res) => {
-  res.json({});
+exports.read = async (req, res, next) => {
+  const { params = {} } = req;
+  const { id = "" } = params;
+
+  const doc = await Model.findById(id);
+
+  res.json({
+    data: doc,
+  });
 };
 
-exports.delete = (req, res) => {
-  res.json({});
+exports.update = async (req, res) => {
+  const { body = {}, params = {} } = req;
+  const { id = "" } = params;
+
+  const doc = await Model.findOneAndUpdate({ _id: id }, body, { new: true });
+
+  res.json({
+    data: doc,
+  });
+};
+
+exports.delete = async (req, res) => {
+  const { body = {}, params = {} } = req;
+  const { id = "" } = params;
+  const doc = await Model.findOneAndDelete({ _id: id });
+
+  res.status(204);
+  res.end();
 };

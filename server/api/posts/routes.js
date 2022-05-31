@@ -6,8 +6,8 @@ router.route("/").get(controller.all).post(controller.create);
 
 router
   .route("/:id")
-  .get(controller.read)
-  .put(controller.update)
-  .delete(controller.delete);
+  .get(controller.id, controller.read)
+  .put(controller.id, controller.update)
+  .delete(controller.id, controller.delete);
 
 module.exports = router;

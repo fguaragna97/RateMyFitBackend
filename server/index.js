@@ -1,7 +1,9 @@
 const express = require("express");
+const api = require("./api");
+
 const app = express();
 
-const api = require("./api");
+app.use(express.json());
 
 app.use("/api", api);
 
@@ -12,10 +14,13 @@ app.use((req, res) => {
   });
 });
 
-app.use((err, req, res) => {
-  res.status(500);
+app.use((err, req, res, next) => {
+  console.log(JSON.stringify(err, null, 2));
+  const { message = "Internal Server Error", statusCode = 500 } = err;
+
+  res.status(statusCode);
   res.json({
-    error: "Internal Server Error",
+    error: message,
   });
 });
 
