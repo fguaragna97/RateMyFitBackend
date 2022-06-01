@@ -1,7 +1,7 @@
 const { Model } = require("./model");
 
 exports.all = async (req, res) => {
-  const response = await Model.find();
+  const response = await Model.find().populate("author").exec();
 
   res.json({
     data: response,

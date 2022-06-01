@@ -7,6 +7,11 @@ const fields = {
     required: true,
     trim: true,
   },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 };
 
 const PostSchema = new Schema(fields, {
