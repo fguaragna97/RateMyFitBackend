@@ -27,8 +27,10 @@ exports.login = async (req, res, next) => {
   });
 
   if (doc) {
+    const token = jwt.sign({ id: doc._id }, process.env.TOKEN_SECRET);
     res.json({
       data: doc,
+      token,
     });
   } else {
     next({
